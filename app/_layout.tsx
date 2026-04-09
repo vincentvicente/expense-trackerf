@@ -5,6 +5,7 @@ import { tamaguiConfig } from '../tamagui.config'
 import { supabase } from '../lib/supabase'
 import { useAuthStore } from '../stores/useAuthStore'
 import { useSettingsStore } from '../stores/useSettingsStore'
+import { useRealtimeSync } from '../hooks/useRealtimeSync'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
 
@@ -13,6 +14,8 @@ export default function RootLayout() {
   const segments = useSegments()
   const { session, setSession } = useAuthStore()
   const theme = useSettingsStore((s) => s.theme)
+
+  useRealtimeSync()
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
