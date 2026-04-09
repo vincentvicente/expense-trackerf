@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Text style={styles.title}>首页</Text>
+        <Text style={styles.title}>我的</Text>
       </View>
     </SafeAreaView>
   )
