@@ -3,9 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator 
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 export default function RegisterScreen() {
   const router = useRouter()
+  const { colors } = useThemeColors()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -39,10 +41,10 @@ export default function RegisterScreen() {
 
   if (success) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.content}>
-          <Text style={styles.title}>注册成功</Text>
-          <Text style={styles.successMessage}>
+          <Text style={[styles.title, { color: colors.text }]}>注册成功</Text>
+          <Text style={[styles.successMessage, { color: colors.textSecondary }]}>
             请查看邮箱验证链接，验证后即可登录。
           </Text>
           <TouchableOpacity
@@ -57,37 +59,37 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <Text style={styles.title}>创建账号</Text>
-        <Text style={styles.subtitle}>注册后开始记录你的开销</Text>
+        <Text style={[styles.title, { color: colors.text }]}>创建账号</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>注册后开始记录你的开销</Text>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           placeholder="邮箱"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           placeholder="密码"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           placeholder="确认密码"
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
 
         <TouchableOpacity

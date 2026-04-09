@@ -3,9 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator 
 import { useRouter } from 'expo-router'
 import { supabase } from '../../lib/supabase'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 export default function LoginScreen() {
   const router = useRouter()
+  const { colors } = useThemeColors()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -24,29 +26,29 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <Text style={styles.title}>开销记录</Text>
-        <Text style={styles.subtitle}>记录每一笔，掌控每一天</Text>
+        <Text style={[styles.title, { color: colors.text }]}>开销记录</Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>记录每一笔，掌控每一天</Text>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           placeholder="邮箱"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.border, color: colors.text }]}
           placeholder="密码"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
 
         <TouchableOpacity

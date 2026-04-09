@@ -3,10 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { getDueBills } from '../lib/api/recurring'
+import { useThemeColors } from '../hooks/useThemeColors'
 import type { RecurringBill } from '../types/database'
 
 export function DueBillCard() {
   const router = useRouter()
+  const { isDark } = useThemeColors()
   const [bills, setBills] = useState<RecurringBill[]>([])
 
   useEffect(() => {
@@ -30,15 +32,15 @@ export function DueBillCard() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#78350f' : '#fef3c7' }]}>
       <View style={styles.header}>
-        <Ionicons name="notifications-outline" size={18} color="#92400e" />
-        <Text style={styles.headerText}>有 {bills.length} 笔待记录账单</Text>
+        <Ionicons name="notifications-outline" size={18} color={isDark ? '#fde68a' : '#92400e'} />
+        <Text style={[styles.headerText, { color: isDark ? '#fde68a' : '#92400e' }]}>有 {bills.length} 笔待记录账单</Text>
       </View>
       {bills.map((bill) => (
         <TouchableOpacity key={bill.id} style={styles.billRow} onPress={() => handlePressBill(bill)}>
-          <Text style={styles.billName}>{bill.name}</Text>
-          <Text style={styles.billAmount}>¥{Number(bill.amount).toFixed(2)}</Text>
+          <Text style={[styles.billName, { color: isDark ? '#fef3c7' : '#78350f' }]}>{bill.name}</Text>
+          <Text style={[styles.billAmount, { color: isDark ? '#fef3c7' : '#78350f' }]}>¥{Number(bill.amount).toFixed(2)}</Text>
         </TouchableOpacity>
       ))}
     </View>

@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { useThemeColors } from '../hooks/useThemeColors'
 import type { Transaction } from '../types/database'
 
 interface TransactionItemProps {
@@ -7,6 +8,7 @@ interface TransactionItemProps {
 }
 
 export function TransactionItem({ transaction, onPress }: TransactionItemProps) {
+  const { colors } = useThemeColors()
   const isExpense = transaction.type === 'expense'
   const icon = transaction.category?.icon ?? (isExpense ? '💰' : '📥')
   const color = transaction.category?.color ?? (isExpense ? '#ef4444' : '#22c55e')
@@ -16,13 +18,13 @@ export function TransactionItem({ transaction, onPress }: TransactionItemProps) 
     : `+¥${Number(transaction.amount).toFixed(2)}`
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress(transaction.id)}>
+    <TouchableOpacity style={[styles.container, { backgroundColor: colors.card }]} onPress={() => onPress(transaction.id)}>
       <View style={[styles.iconCircle, { backgroundColor: color + '20' }]}>
         <Text style={styles.iconText}>{icon}</Text>
       </View>
       <View style={styles.middle}>
-        <Text style={styles.categoryName}>{categoryName}</Text>
-        {transaction.notes ? <Text style={styles.notes} numberOfLines={1}>{transaction.notes}</Text> : null}
+        <Text style={[styles.categoryName, { color: colors.text }]}>{categoryName}</Text>
+        {transaction.notes ? <Text style={[styles.notes, { color: colors.textSecondary }]} numberOfLines={1}>{transaction.notes}</Text> : null}
       </View>
       <Text style={[styles.amount, { color: isExpense ? '#ef4444' : '#22c55e' }]}>
         {amountText}

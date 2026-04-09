@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 interface NumericKeypadProps {
   value: string
@@ -40,6 +41,8 @@ const KEYS: KeyDef[][] = [
 ]
 
 export function NumericKeypad({ value, onValueChange, onConfirm }: NumericKeypadProps) {
+  const { colors, isDark } = useThemeColors()
+
   const handlePress = (key: KeyDef) => {
     if (key.type === 'confirm') {
       onConfirm()
@@ -89,11 +92,11 @@ export function NumericKeypad({ value, onValueChange, onConfirm }: NumericKeypad
   const displayAmount = value || '0'
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#1f2937' : '#f3f4f6' }]}>
       {/* Amount display */}
-      <View style={styles.amountRow}>
-        <Text style={styles.currencySign}>¥</Text>
-        <Text style={styles.amountText} numberOfLines={1}>
+      <View style={[styles.amountRow, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
+        <Text style={[styles.currencySign, { color: colors.textSecondary }]}>¥</Text>
+        <Text style={[styles.amountText, { color: colors.text }]} numberOfLines={1}>
           {displayAmount}
         </Text>
       </View>
@@ -103,7 +106,7 @@ export function NumericKeypad({ value, onValueChange, onConfirm }: NumericKeypad
         <View key={rowIndex} style={styles.row}>
           {row.map((key, colIndex) => {
             if (key.label === '' && key.type === 'digit') {
-              return <View key={colIndex} style={styles.key} />
+              return <View key={colIndex} style={[styles.key, { backgroundColor: colors.card }]} />
             }
 
             const isConfirm = key.type === 'confirm'
@@ -115,8 +118,9 @@ export function NumericKeypad({ value, onValueChange, onConfirm }: NumericKeypad
                 key={colIndex}
                 style={[
                   styles.key,
+                  { backgroundColor: colors.card },
                   isConfirm && styles.confirmKey,
-                  isOp && styles.opKey,
+                  isOp && { backgroundColor: isDark ? '#111827' : '#f9fafb' },
                 ]}
                 activeOpacity={0.6}
                 onPress={() => handlePress(key)}
@@ -124,8 +128,9 @@ export function NumericKeypad({ value, onValueChange, onConfirm }: NumericKeypad
                 <Text
                   style={[
                     styles.keyText,
+                    { color: colors.text },
                     isConfirm && styles.confirmKeyText,
-                    isOp && styles.opKeyText,
+                    isOp && { color: colors.textSecondary },
                     isBackspace && styles.backspaceText,
                   ]}
                 >

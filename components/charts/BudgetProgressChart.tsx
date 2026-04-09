@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 interface BudgetProgressChartProps {
   spent: number
@@ -6,10 +7,12 @@ interface BudgetProgressChartProps {
 }
 
 export function BudgetProgressChart({ spent, budget }: BudgetProgressChartProps) {
+  const { colors, isDark } = useThemeColors()
+
   if (budget <= 0) {
     return (
-      <View style={styles.empty}>
-        <Text style={styles.emptyText}>暂未设置预算</Text>
+      <View style={[styles.empty, { backgroundColor: colors.card }]}>
+        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂未设置预算</Text>
       </View>
     )
   }
@@ -19,12 +22,12 @@ export function BudgetProgressChart({ spent, budget }: BudgetProgressChartProps)
   const primaryColor = overBudget ? '#ef4444' : '#3b82f6'
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>本月预算使用情况</Text>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <Text style={[styles.title, { color: colors.text }]}>本月预算使用情况</Text>
 
       {/* Circular progress */}
       <View style={styles.circleContainer}>
-        <View style={[styles.circleOuter, { borderColor: '#f3f4f6' }]}>
+        <View style={[styles.circleOuter, { borderColor: isDark ? '#374151' : '#f3f4f6' }]}>
           <View
             style={[
               styles.circleInner,
@@ -35,7 +38,7 @@ export function BudgetProgressChart({ spent, budget }: BudgetProgressChartProps)
             <Text style={[styles.percentText, { color: primaryColor }]}>
               {Math.round((spent / budget) * 100)}%
             </Text>
-            <Text style={styles.percentLabel}>
+            <Text style={[styles.percentLabel, { color: colors.textSecondary }]}>
               {overBudget ? '已超支' : '已使用'}
             </Text>
           </View>
@@ -43,7 +46,7 @@ export function BudgetProgressChart({ spent, budget }: BudgetProgressChartProps)
       </View>
 
       {/* Progress bar */}
-      <View style={styles.barBackground}>
+      <View style={[styles.barBackground, { backgroundColor: isDark ? '#374151' : '#f3f4f6' }]}>
         <View
           style={[
             styles.barFill,
@@ -58,17 +61,17 @@ export function BudgetProgressChart({ spent, budget }: BudgetProgressChartProps)
       {/* Summary */}
       <View style={styles.summaryRow}>
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>已支出</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>已支出</Text>
           <Text style={[styles.summaryValue, { color: primaryColor }]}>
             ¥{spent.toFixed(2)}
           </Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>预算</Text>
-          <Text style={styles.summaryValue}>¥{budget.toFixed(2)}</Text>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>预算</Text>
+          <Text style={[styles.summaryValue, { color: colors.text }]}>¥{budget.toFixed(2)}</Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>
+          <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
             {overBudget ? '超支' : '剩余'}
           </Text>
           <Text

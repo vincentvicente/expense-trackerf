@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, useWindowDimensions } from 'react-native'
+import { useThemeColors } from '../hooks/useThemeColors'
 import type { Category } from '../types/database'
 
 interface CategoryGridProps {
@@ -11,6 +12,7 @@ const COLUMNS = 4
 
 export function CategoryGrid({ categories, selectedId, onSelect }: CategoryGridProps) {
   const { width } = useWindowDimensions()
+  const { colors } = useThemeColors()
   const itemWidth = (width - 24) / COLUMNS // 24 = paddingHorizontal * 2
 
   const items = [
@@ -46,7 +48,7 @@ export function CategoryGrid({ categories, selectedId, onSelect }: CategoryGridP
             >
               <Text style={styles.iconText}>{cat.icon || '📁'}</Text>
             </View>
-            <Text style={[styles.name, isSelected && styles.nameSelected]} numberOfLines={1}>
+            <Text style={[styles.name, { color: colors.textSecondary }, isSelected && styles.nameSelected]} numberOfLines={1}>
               {cat.name}
             </Text>
           </TouchableOpacity>

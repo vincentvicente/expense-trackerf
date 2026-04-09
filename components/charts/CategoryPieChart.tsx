@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { PieChart } from 'react-native-gifted-charts'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 interface CategoryBreakdownItem {
   category_id: string
@@ -14,14 +15,17 @@ interface CategoryPieChartProps {
 }
 
 function EmptyState() {
+  const { colors } = useThemeColors()
   return (
-    <View style={styles.empty}>
-      <Text style={styles.emptyText}>暂无数据</Text>
+    <View style={[styles.empty, { backgroundColor: colors.card }]}>
+      <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无数据</Text>
     </View>
   )
 }
 
 export function CategoryPieChart({ data }: CategoryPieChartProps) {
+  const { colors } = useThemeColors()
+
   if (data.length === 0) return <EmptyState />
 
   const total = data.reduce((sum, d) => sum + Number(d.total), 0)
@@ -33,8 +37,8 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
   }))
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>分类占比</Text>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <Text style={[styles.title, { color: colors.text }]}>分类占比</Text>
       <View style={styles.chartRow}>
         <PieChart
           data={pieData}
@@ -43,8 +47,8 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
           innerRadius={50}
           centerLabelComponent={() => (
             <View style={styles.centerLabel}>
-              <Text style={styles.centerLabelSub}>总支出</Text>
-              <Text style={styles.centerLabelAmount}>¥{total.toFixed(0)}</Text>
+              <Text style={[styles.centerLabelSub, { color: colors.textSecondary }]}>总支出</Text>
+              <Text style={[styles.centerLabelAmount, { color: colors.text }]}>¥{total.toFixed(0)}</Text>
             </View>
           )}
         />
@@ -57,7 +61,7 @@ export function CategoryPieChart({ data }: CategoryPieChartProps) {
                   { backgroundColor: d.category_color || '#6b7280' },
                 ]}
               />
-              <Text style={styles.legendText} numberOfLines={1}>
+              <Text style={[styles.legendText, { color: colors.text }]} numberOfLines={1}>
                 {d.category_icon} {d.category_name}  ¥{Number(d.total).toFixed(0)}
               </Text>
             </View>

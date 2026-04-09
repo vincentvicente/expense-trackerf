@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../../lib/supabase'
 import { TransactionItem } from '../../components/TransactionItem'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { Transaction } from '../../types/database'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
@@ -21,6 +22,7 @@ const FILTER_LABELS: Record<FilterType, string> = {
 
 export default function BillsScreen() {
   const router = useRouter()
+  const { colors, isDark } = useThemeColors()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<FilterType>('all')
@@ -75,22 +77,22 @@ export default function BillsScreen() {
   }, [filtered])
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>账单</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.header, { color: colors.text }]}>账单</Text>
 
       {/* Search bar */}
-      <View style={styles.searchBar}>
-        <Ionicons name="search-outline" size={18} color="#9ca3af" />
+      <View style={[styles.searchBar, { backgroundColor: isDark ? '#1f2937' : '#f3f4f6' }]}>
+        <Ionicons name="search-outline" size={18} color={colors.textSecondary} />
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, { color: colors.text }]}
           placeholder="搜索备注..."
           value={search}
           onChangeText={setSearch}
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
         {search.length > 0 && (
           <TouchableOpacity onPress={() => setSearch('')}>
-            <Ionicons name="close-circle" size={18} color="#9ca3af" />
+            <Ionicons name="close-circle" size={18} color={colors.textSecondary} />
           </TouchableOpacity>
         )}
       </View>
@@ -100,10 +102,10 @@ export default function BillsScreen() {
         {(['all', 'expense', 'income'] as FilterType[]).map(f => (
           <TouchableOpacity
             key={f}
-            style={[styles.chip, filter === f && styles.activeChip]}
+            style={[styles.chip, { backgroundColor: isDark ? '#1f2937' : '#f3f4f6' }, filter === f && styles.activeChip]}
             onPress={() => setFilter(f)}
           >
-            <Text style={[styles.chipText, filter === f && styles.activeChipText]}>
+            <Text style={[styles.chipText, { color: colors.textSecondary }, filter === f && styles.activeChipText]}>
               {FILTER_LABELS[f]}
             </Text>
           </TouchableOpacity>
@@ -115,7 +117,7 @@ export default function BillsScreen() {
         sections={sections}
         keyExtractor={item => item.id}
         renderSectionHeader={({ section }) => (
-          <Text style={styles.sectionHeader}>{section.title}</Text>
+          <Text style={[styles.sectionHeader, { backgroundColor: colors.background, color: colors.textSecondary }]}>{section.title}</Text>
         )}
         renderItem={({ item }) => (
           <TransactionItem

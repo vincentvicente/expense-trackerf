@@ -4,12 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useBudgetStore } from '../../stores/useBudgetStore'
-import { useSettingsStore } from '../../stores/useSettingsStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 export default function BudgetSettingScreen() {
   const router = useRouter()
   const { budget, fetchBudget, setBudget, loading } = useBudgetStore()
-  const isDark = useSettingsStore((s) => s.theme === 'dark')
+  const { colors, isDark } = useThemeColors()
 
   const now = new Date()
   const year = now.getFullYear()

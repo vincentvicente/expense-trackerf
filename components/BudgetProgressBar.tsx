@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 interface BudgetProgressBarProps {
   spent: number
@@ -6,10 +7,12 @@ interface BudgetProgressBarProps {
 }
 
 export function BudgetProgressBar({ spent, budget }: BudgetProgressBarProps) {
+  const { colors, isDark } = useThemeColors()
+
   if (budget <= 0) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.noBudgetText}>未设置预算</Text>
+      <View style={[styles.container, { backgroundColor: colors.card }]}>
+        <Text style={[styles.noBudgetText, { color: colors.textSecondary }]}>未设置预算</Text>
       </View>
     )
   }
@@ -20,11 +23,11 @@ export function BudgetProgressBar({ spent, budget }: BudgetProgressBarProps) {
   const barColor = isOver ? '#ef4444' : '#3b82f6'
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.budgetText}>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <Text style={[styles.budgetText, { color: colors.textSecondary }]}>
         预算 ¥{spent.toFixed(2)} / ¥{budget.toFixed(2)}  已用 {percentage}%
       </Text>
-      <View style={styles.barBackground}>
+      <View style={[styles.barBackground, { backgroundColor: isDark ? '#374151' : '#e5e7eb' }]}>
         <View style={[styles.barFill, { width: `${barWidth}%`, backgroundColor: barColor }]} />
       </View>
     </View>

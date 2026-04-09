@@ -12,11 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { supabase } from '../../lib/supabase'
 import { useTransactionStore } from '../../stores/useTransactionStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { Transaction } from '../../types/database'
 import dayjs from 'dayjs'
 
 export default function TransactionDetailScreen() {
   const router = useRouter()
+  const { colors, isDark } = useThemeColors()
   const { id } = useLocalSearchParams<{ id: string }>()
   const { removeTransaction } = useTransactionStore()
   const [transaction, setTransaction] = useState<Transaction | null>(null)
@@ -71,7 +73,7 @@ export default function TransactionDetailScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f5f5f5' }]}>
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#6366f1" />
         </View>
@@ -81,16 +83,16 @@ export default function TransactionDetailScreen() {
 
   if (!transaction) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
+      <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f5f5f5' }]}>
+        <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>账单详情</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>账单详情</Text>
           <View style={styles.headerRight} />
         </View>
         <View style={styles.centered}>
-          <Text style={styles.notFoundText}>记录不存在</Text>
+          <Text style={[styles.notFoundText, { color: colors.textSecondary }]}>记录不存在</Text>
         </View>
       </SafeAreaView>
     )
@@ -103,20 +105,20 @@ export default function TransactionDetailScreen() {
   const categoryName = transaction.category?.name ?? '未分类'
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f5f5f5' }]}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>账单详情</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>账单详情</Text>
         <View style={styles.headerRight} />
       </View>
 
       {/* Category icon & amount */}
-      <View style={styles.heroSection}>
+      <View style={[styles.heroSection, { backgroundColor: colors.card }]}>
         <Text style={styles.heroIcon}>{categoryIcon}</Text>
-        <Text style={styles.heroCategory}>{categoryName}</Text>
+        <Text style={[styles.heroCategory, { color: colors.textSecondary }]}>{categoryName}</Text>
         <Text style={[styles.heroAmount, { color: amountColor }]}>
           {amountPrefix}
           {transaction.amount.toFixed(2)}
@@ -124,17 +126,19 @@ export default function TransactionDetailScreen() {
       </View>
 
       {/* Detail rows */}
-      <View style={styles.detailCard}>
-        <DetailRow label="分类" value={categoryName} />
+      <View style={[styles.detailCard, { backgroundColor: colors.card }]}>
+        <DetailRow label="分类" value={categoryName} colors={colors} />
         <DetailRow
           label="日期"
           value={dayjs(transaction.date).format('YYYY年M月D日')}
+          colors={colors}
         />
-        <DetailRow label="备注" value={transaction.notes || '无'} />
+        <DetailRow label="备注" value={transaction.notes || '无'} colors={colors} />
         <DetailRow
           label="创建"
           value={dayjs(transaction.created_at).format('YYYY-MM-DD HH:mm')}
           isLast
+          colors={colors}
         />
       </View>
 
@@ -155,15 +159,17 @@ function DetailRow({
   label,
   value,
   isLast = false,
+  colors,
 }: {
   label: string
   value: string
   isLast?: boolean
+  colors: { text: string; textSecondary: string; border: string }
 }) {
   return (
-    <View style={[styles.detailRow, !isLast && styles.detailRowBorder]}>
-      <Text style={styles.detailLabel}>{label}</Text>
-      <Text style={styles.detailValue}>{value}</Text>
+    <View style={[styles.detailRow, !isLast && [styles.detailRowBorder, { borderBottomColor: colors.border }]]}>
+      <Text style={[styles.detailLabel, { color: colors.textSecondary }]}>{label}</Text>
+      <Text style={[styles.detailValue, { color: colors.text }]}>{value}</Text>
     </View>
   )
 }

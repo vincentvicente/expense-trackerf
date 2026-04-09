@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { getRecurringBills, createRecurringBill, deleteRecurringBill } from '../../lib/api/recurring'
 import { useCategoryStore } from '../../stores/useCategoryStore'
-import { useSettingsStore } from '../../stores/useSettingsStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { RecurringBill, RecurrenceCycle } from '../../types/database'
 
 const CYCLE_OPTIONS: { label: string; value: RecurrenceCycle }[] = [
@@ -19,7 +19,7 @@ const cycleLabel = (cycle: RecurrenceCycle) =>
 
 export default function RecurringScreen() {
   const router = useRouter()
-  const isDark = useSettingsStore((s) => s.theme === 'dark')
+  const { isDark } = useThemeColors()
   const { expenseCategories, fetchCategories } = useCategoryStore()
 
   const [bills, setBills] = useState<RecurringBill[]>([])

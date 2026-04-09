@@ -5,12 +5,12 @@ import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { getTemplates, createTemplate, deleteTemplate } from '../../lib/api/templates'
 import { useCategoryStore } from '../../stores/useCategoryStore'
-import { useSettingsStore } from '../../stores/useSettingsStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { QuickTemplate, TransactionType } from '../../types/database'
 
 export default function TemplatesScreen() {
   const router = useRouter()
-  const isDark = useSettingsStore((s) => s.theme === 'dark')
+  const { isDark } = useThemeColors()
   const { expenseCategories, incomeCategories, fetchCategories } = useCategoryStore()
 
   const [templates, setTemplates] = useState<QuickTemplate[]>([])

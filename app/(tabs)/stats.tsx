@@ -15,6 +15,7 @@ import { BudgetProgressChart } from '../../components/charts/BudgetProgressChart
 import { useTransactionStore } from '../../stores/useTransactionStore'
 import { useBudgetStore } from '../../stores/useBudgetStore'
 import { getDailyTrend, getCategoryBreakdown } from '../../lib/api/stats'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { CategoryBreakdown } from '../../lib/api/stats'
 
 type TimeRange = 'week' | 'month' | 'year'
@@ -34,6 +35,7 @@ const CHART_TAB_OPTIONS: { key: ChartTab; label: string }[] = [
 ]
 
 export default function StatsScreen() {
+  const { colors, isDark } = useThemeColors()
   const [timeRange, setTimeRange] = useState<TimeRange>('month')
   const [chartTab, setChartTab] = useState<ChartTab>('trend')
   const [trendData, setTrendData] = useState<
@@ -107,24 +109,25 @@ export default function StatsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <Text style={styles.header}>统计</Text>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <Text style={[styles.header, { color: colors.text }]}>统计</Text>
 
       {/* Time range selector */}
-      <View style={styles.segmentRow}>
+      <View style={[styles.segmentRow, { backgroundColor: isDark ? '#1f2937' : '#f3f4f6' }]}>
         {TIME_RANGE_OPTIONS.map((opt) => (
           <TouchableOpacity
             key={opt.key}
             style={[
               styles.segmentButton,
-              timeRange === opt.key && styles.segmentButtonActive,
+              timeRange === opt.key && [styles.segmentButtonActive, { backgroundColor: isDark ? '#374151' : '#fff' }],
             ]}
             onPress={() => setTimeRange(opt.key)}
           >
             <Text
               style={[
                 styles.segmentText,
-                timeRange === opt.key && styles.segmentTextActive,
+                { color: colors.textSecondary },
+                timeRange === opt.key && { color: colors.text, fontWeight: '600' },
               ]}
             >
               {opt.label}
@@ -140,6 +143,7 @@ export default function StatsScreen() {
             key={opt.key}
             style={[
               styles.tabButton,
+              { borderColor: colors.border, backgroundColor: colors.card },
               chartTab === opt.key && styles.tabButtonActive,
             ]}
             onPress={() => setChartTab(opt.key)}
@@ -147,6 +151,7 @@ export default function StatsScreen() {
             <Text
               style={[
                 styles.tabText,
+                { color: colors.textSecondary },
                 chartTab === opt.key && styles.tabTextActive,
               ]}
             >

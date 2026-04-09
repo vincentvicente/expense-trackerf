@@ -1,19 +1,23 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { LineChart } from 'react-native-gifted-charts'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 interface ExpenseTrendChartProps {
   data: { date: string; expense: number; income: number }[]
 }
 
 function EmptyState() {
+  const { colors } = useThemeColors()
   return (
-    <View style={styles.empty}>
-      <Text style={styles.emptyText}>暂无数据</Text>
+    <View style={[styles.empty, { backgroundColor: colors.card }]}>
+      <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无数据</Text>
     </View>
   )
 }
 
 export function ExpenseTrendChart({ data }: ExpenseTrendChartProps) {
+  const { colors } = useThemeColors()
+
   if (data.length === 0) return <EmptyState />
 
   const lineData = data.map((d) => ({
@@ -22,8 +26,8 @@ export function ExpenseTrendChart({ data }: ExpenseTrendChartProps) {
   }))
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>支出趋势</Text>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <Text style={[styles.title, { color: colors.text }]}>支出趋势</Text>
       <LineChart
         data={lineData}
         color="#ef4444"
@@ -31,14 +35,14 @@ export function ExpenseTrendChart({ data }: ExpenseTrendChartProps) {
         curved
         hideDataPoints={false}
         dataPointsColor="#ef4444"
-        xAxisLabelTextStyle={{ fontSize: 10, color: '#9ca3af' }}
-        yAxisTextStyle={{ fontSize: 10, color: '#9ca3af' }}
+        xAxisLabelTextStyle={{ fontSize: 10, color: colors.textSecondary }}
+        yAxisTextStyle={{ fontSize: 10, color: colors.textSecondary }}
         spacing={data.length > 15 ? 30 : 50}
         width={300}
         height={200}
         noOfSections={4}
         rulesType="solid"
-        rulesColor="#f3f4f6"
+        rulesColor={colors.border}
       />
     </View>
   )

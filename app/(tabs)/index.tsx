@@ -9,9 +9,11 @@ import { TransactionList } from '../../components/TransactionList'
 import { FloatingAddButton } from '../../components/FloatingAddButton'
 import { useTransactionStore } from '../../stores/useTransactionStore'
 import { useBudgetStore } from '../../stores/useBudgetStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 export default function HomeScreen() {
   const router = useRouter()
+  const { colors, isDark } = useThemeColors()
   const { currentYear, currentMonth, setMonth, fetchTransactions, transactions } =
     useTransactionStore()
   const { fetchBudget, budget } = useBudgetStore()
@@ -30,7 +32,7 @@ export default function HomeScreen() {
     .reduce((sum, t) => sum + Number(t.amount), 0)
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#111827' : '#f3f4f6' }]}>
       <MonthSelector
         year={currentYear}
         month={currentMonth}

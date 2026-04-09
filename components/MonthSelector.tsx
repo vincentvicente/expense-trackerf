@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 interface MonthSelectorProps {
   year: number
@@ -16,6 +17,8 @@ export function MonthSelector({
   totalIncome,
   onChangeMonth,
 }: MonthSelectorProps) {
+  const { colors } = useThemeColors()
+
   const goToPrevMonth = () => {
     if (month === 1) onChangeMonth(year - 1, 12)
     else onChangeMonth(year, month - 1)
@@ -27,12 +30,12 @@ export function MonthSelector({
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
       <TouchableOpacity onPress={goToPrevMonth} style={styles.arrow}>
-        <Ionicons name="chevron-back" size={24} color="#6b7280" />
+        <Ionicons name="chevron-back" size={24} color={colors.textSecondary} />
       </TouchableOpacity>
       <View style={styles.center}>
-        <Text style={styles.monthText}>
+        <Text style={[styles.monthText, { color: colors.text }]}>
           {year}年{month}月
         </Text>
         <View style={styles.summaryRow}>
@@ -41,7 +44,7 @@ export function MonthSelector({
         </View>
       </View>
       <TouchableOpacity onPress={goToNextMonth} style={styles.arrow}>
-        <Ionicons name="chevron-forward" size={24} color="#6b7280" />
+        <Ionicons name="chevron-forward" size={24} color={colors.textSecondary} />
       </TouchableOpacity>
     </View>
   )

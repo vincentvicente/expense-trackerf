@@ -1,19 +1,23 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { BarChart } from 'react-native-gifted-charts'
+import { useThemeColors } from '../../hooks/useThemeColors'
 
 interface IncomeExpenseBarChartProps {
   data: { date: string; income: number; expense: number }[]
 }
 
 function EmptyState() {
+  const { colors } = useThemeColors()
   return (
-    <View style={styles.empty}>
-      <Text style={styles.emptyText}>暂无数据</Text>
+    <View style={[styles.empty, { backgroundColor: colors.card }]}>
+      <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无数据</Text>
     </View>
   )
 }
 
 export function IncomeExpenseBarChart({ data }: IncomeExpenseBarChartProps) {
+  const { colors } = useThemeColors()
+
   if (data.length === 0) return <EmptyState />
 
   // Group daily data into weekly buckets
@@ -41,27 +45,27 @@ export function IncomeExpenseBarChart({ data }: IncomeExpenseBarChartProps) {
   ])
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>收支对比</Text>
+    <View style={[styles.container, { backgroundColor: colors.card }]}>
+      <Text style={[styles.title, { color: colors.text }]}>收支对比</Text>
       <BarChart
         data={barData}
         barWidth={20}
         spacing={16}
-        xAxisLabelTextStyle={{ fontSize: 10, color: '#9ca3af' }}
-        yAxisTextStyle={{ fontSize: 10, color: '#9ca3af' }}
+        xAxisLabelTextStyle={{ fontSize: 10, color: colors.textSecondary }}
+        yAxisTextStyle={{ fontSize: 10, color: colors.textSecondary }}
         height={200}
         noOfSections={4}
         rulesType="solid"
-        rulesColor="#f3f4f6"
+        rulesColor={colors.border}
       />
       <View style={styles.legendRow}>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#22c55e' }]} />
-          <Text style={styles.legendText}>收入</Text>
+          <Text style={[styles.legendText, { color: colors.text }]}>收入</Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#ef4444' }]} />
-          <Text style={styles.legendText}>支出</Text>
+          <Text style={[styles.legendText, { color: colors.text }]}>支出</Text>
         </View>
       </View>
     </View>

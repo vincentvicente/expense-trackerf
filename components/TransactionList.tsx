@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import type { Transaction } from '../types/database'
 import { TransactionItem } from './TransactionItem'
+import { useThemeColors } from '../hooks/useThemeColors'
 
 dayjs.locale('zh-cn')
 
@@ -36,6 +37,7 @@ function groupByDate(transactions: Transaction[]): Section[] {
 }
 
 export function TransactionList({ transactions, onPressTransaction }: TransactionListProps) {
+  const { colors, isDark } = useThemeColors()
   const sections = groupByDate(transactions)
 
   return (
@@ -43,8 +45,8 @@ export function TransactionList({ transactions, onPressTransaction }: Transactio
       sections={sections}
       keyExtractor={(item) => item.id}
       renderSectionHeader={({ section }) => (
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionHeaderText}>{section.title}</Text>
+        <View style={[styles.sectionHeader, { backgroundColor: isDark ? '#111827' : '#f3f4f6' }]}>
+          <Text style={[styles.sectionHeaderText, { color: colors.textSecondary }]}>{section.title}</Text>
         </View>
       )}
       renderItem={({ item }) => (
@@ -54,7 +56,7 @@ export function TransactionList({ transactions, onPressTransaction }: Transactio
       stickySectionHeadersEnabled={false}
       ListEmptyComponent={
         <View style={styles.empty}>
-          <Text style={styles.emptyText}>暂无交易记录</Text>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无交易记录</Text>
         </View>
       }
     />

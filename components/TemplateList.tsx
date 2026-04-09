@@ -1,4 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import { useThemeColors } from '../hooks/useThemeColors'
 import type { QuickTemplate } from '../types/database'
 
 interface TemplateListProps {
@@ -7,10 +8,12 @@ interface TemplateListProps {
 }
 
 export function TemplateList({ templates, onSelect }: TemplateListProps) {
+  const { colors, isDark } = useThemeColors()
+
   if (templates.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>暂无常用模板</Text>
+        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>暂无常用模板</Text>
       </View>
     )
   }
@@ -24,18 +27,18 @@ export function TemplateList({ templates, onSelect }: TemplateListProps) {
       contentContainerStyle={styles.list}
       renderItem={({ item }) => (
         <TouchableOpacity
-          style={styles.card}
+          style={[styles.card, { backgroundColor: isDark ? '#1f2937' : '#f9fafb' }]}
           activeOpacity={0.7}
           onPress={() => onSelect(item)}
         >
-          <View style={styles.iconCircle}>
+          <View style={[styles.iconCircle, { backgroundColor: isDark ? '#374151' : '#e5e7eb' }]}>
             <Text style={styles.iconText}>{item.category?.icon || '📁'}</Text>
           </View>
-          <Text style={styles.name} numberOfLines={1}>
+          <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>
             {item.name}
           </Text>
           {item.amount != null && (
-            <Text style={styles.amount}>¥{item.amount}</Text>
+            <Text style={[styles.amount, { color: colors.textSecondary }]}>¥{item.amount}</Text>
           )}
         </TouchableOpacity>
       )}

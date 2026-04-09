@@ -8,6 +8,7 @@ import { NumericKeypad } from '../components/NumericKeypad'
 import { TemplateList } from '../components/TemplateList'
 import { useCategoryStore } from '../stores/useCategoryStore'
 import { useTransactionStore } from '../stores/useTransactionStore'
+import { useThemeColors } from '../hooks/useThemeColors'
 import { getTemplates } from '../lib/api/templates'
 import type { QuickTemplate } from '../types/database'
 import dayjs from 'dayjs'
@@ -16,6 +17,7 @@ type TabType = 'expense' | 'income' | 'template'
 
 export default function AddScreen() {
   const router = useRouter()
+  const { colors, isDark } = useThemeColors()
   const params = useLocalSearchParams<{
     prefill_category_id?: string
     prefill_amount?: string
@@ -107,25 +109,25 @@ export default function AddScreen() {
   const categories = activeTab === 'income' ? incomeCategories : expenseCategories
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="arrow-back" size={24} color="#1f2937" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>记一笔</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>记一笔</Text>
         <View style={styles.headerSpacer} />
       </View>
 
       {/* Tabs: 支出 | 收入 | 常用 */}
-      <View style={styles.tabs}>
+      <View style={[styles.tabs, { borderBottomColor: colors.border }]}>
         {(['expense', 'income', 'template'] as TabType[]).map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.activeTab]}
             onPress={() => handleTabChange(tab)}
           >
-            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+            <Text style={[styles.tabText, { color: colors.textSecondary }, activeTab === tab && styles.activeTabText]}>
               {tab === 'expense' ? '支出' : tab === 'income' ? '收入' : '常用'}
             </Text>
           </TouchableOpacity>
@@ -146,16 +148,16 @@ export default function AddScreen() {
       </View>
 
       {/* Notes + Date row */}
-      <View style={styles.metaRow}>
+      <View style={[styles.metaRow, { borderTopColor: colors.border }]}>
         <TextInput
-          style={styles.notesInput}
+          style={[styles.notesInput, { color: colors.text }]}
           placeholder="添加备注..."
           value={notes}
           onChangeText={setNotes}
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={colors.textSecondary}
         />
-        <TouchableOpacity style={styles.dateButton}>
-          <Text style={styles.dateText}>{dayjs(date).format('M月D日')}</Text>
+        <TouchableOpacity style={[styles.dateButton, { backgroundColor: isDark ? '#1f2937' : '#f3f4f6' }]}>
+          <Text style={[styles.dateText, { color: colors.textSecondary }]}>{dayjs(date).format('M月D日')}</Text>
         </TouchableOpacity>
       </View>
 

@@ -4,13 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useCategoryStore } from '../../stores/useCategoryStore'
-import { useSettingsStore } from '../../stores/useSettingsStore'
+import { useThemeColors } from '../../hooks/useThemeColors'
 import type { TransactionType, Category } from '../../types/database'
 
 export default function CategoriesScreen() {
   const router = useRouter()
   const { expenseCategories, incomeCategories, loading, fetchCategories, addCategory, removeCategory } = useCategoryStore()
-  const isDark = useSettingsStore((s) => s.theme === 'dark')
+  const { isDark } = useThemeColors()
 
   const [modalVisible, setModalVisible] = useState(false)
   const [newName, setNewName] = useState('')
